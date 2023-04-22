@@ -1,0 +1,9 @@
+f= @(x) -5*x(1)-x(2);
+A = [[1,1];[2,1/2]];
+b = [5,8];
+lb = [0,0];
+Aeq = [0,0];
+beq = [0];
+x0 = [0,0];
+options=optimoptions(@fmincon,'Algorithm','interior-point');
+[x,fval] = fmincon(f,x0,A,b,Aeq,beq,lb,[],[],options)

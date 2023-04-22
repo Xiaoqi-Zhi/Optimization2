@@ -1,0 +1,151 @@
+\documentclass[12pt, a4paper, oneside, fontset=windows]{ctexart}
+\usepackage{amsmath, amsthm, amssymb, appendix, bm, graphicx, hyperref, mathrsfs}
+
+\title{\textbf{最优化2第一次作业}}
+\author{大数据001\\郅啸淇\\学号：2184114639}
+\date{\today}
+\linespread{1.5}
+
+\newtheorem{theorem}{定理}[section]
+\newtheorem{definition}[theorem]{定义}
+\newtheorem{lemma}[theorem]{引理}
+\newtheorem{corollary}[theorem]{推论}
+\newtheorem{example}[theorem]{例}
+\newtheorem{proposition}[theorem]{命题}
+\begin{document}
+\maketitle
+\newpage
+\tableofcontents
+\newpage
+\section{HW1}
+由题中条件有
+
+$E(\textbf{r}) = (\mu)$
+
+$ E(R) = E(\textbf{r}^{T} \textbf{x}) $
+
+$= \mu^{T} \textbf{x}$
+
+对于另一项
+
+$Var(R) = Var(\textbf{r}^{T}\textbf{x})$
+
+$= x^{2}Var(r) = x^{2} \sum $
+
+$=\textbf{x}^{T}\sum \textbf{x}$
+
+故原题中两问题等价
+\section{HW2}
+从泊松回归推出题中问题
+
+$\bullet b_{i}\sim P(b_{i} |\lambda_{i})$
+
+$P(b_{i} |\lambda_{i}) = \frac{e^{-\lambda_{i}}\lambda^{b_{i}}_{i}}{b_{i}!}$
+
+$=\frac{e^{-\lambda_{i}+b_{i}ln\lambda_{i}}}{b_{i}!}$
+
+取分子做优化问题
+
+$\mathop{max}\limits_{x} \prod_{i=1}^{m} P(b_{i} | \lambda_{i})$
+
+$\Rightarrow \mathop{max}\limits_{x} \prod_{i=1}^{m} e^{-\lambda_{i}+b_{i}ln\lambda_{i}}$
+
+$\Rightarrow \mathop{max}\limits_{x} \sum_{i=1}^{m} -\lambda_{i}+b_{i}ln\lambda_{i}$
+
+令$ln\lambda_{i} = \left \langle \alpha_{i},x \right \rangle$
+
+即$\Rightarrow \mathop{max}\limits_{x} \sum_{i=1}^{m} -e^{\left \langle \alpha_{i},x \right \rangle} + b_{i}\left \langle \alpha_{i},x \right \rangle$
+
+$\Rightarrow \mathop{min}\limits_{x} \sum_{i=1}^{m} e^{\left \langle \alpha_{i},x \right \rangle} - \textbf{b}^{T}\textbf{Ax}$
+
+故推导完成
+\section{HW3}
+\subsection{Gradient Descent Method}
+$\nabla f(x) = (Ax-b)\textbf{A}^{T}$
+
+$= \textbf{A}^{T}(Ax-b)$
+
+$x^{t+1} = x^{t} -St\textbf{A}^{T}(Ax-b)$
+
+因为$\beta-smooth$故$St = \frac{1}{\beta}$
+\subsection{Newton-Raphson}
+$x^{t+1} = x^{t} - St(\nabla^{2}f(x^{t}))^{-1}\nabla f(x^{t})$
+
+$\nabla^{2} f(x^{t}) = A^{T}A$
+\subsection{Sub-Gradient}
+$x^{t+1} = x^{t} - Stg^{t}$
+
+其中$g^{t} \in \partial f(x^{t})$
+
+$x^{t+1} = x^{t} - St(A^{T}(Ax-b)+\lambda)$
+\subsection{Proximal Gradient Descent}
+令$g(x) = \frac{1}{2}\|Ax-b \|^{2}, h(x) = \lambda \|x_{1}\|$
+
+$x^{k+1} = prox_{th(x)}(x^{k}-t\nabla(\frac{1}{2} \|Ax^{k} -b\|^{2}))$
+
+$= S_{\lambda t}(x^{k} - tA^{T}(Ax-b))$\
+
+其中$S_{\lambda t} = \left\{\begin{matrix}
+    x-\lambda t & if x>\lambda t & \\ 
+    0 &if|x|\leq \lambda t  & \\ 
+    x+\lambda t & if x < -\lambda t & 
+    \end{matrix}\right.$
+\section{HW4}
+分别取General Optimality Condition中$y$为$2x^{*},0$，得到
+
+$\langle \nabla f(x^{*}), 0-x^{*} \rangle \geq 0$
+
+$\langle \nabla f(x^{*}),2x^{*}-x^{*} \rangle \geq 0 $
+
+得到$-\nabla f(x^{*})x^{*} \geq 0$ 并且 $\nabla f(x^{*})x^{*} \geq 0$
+
+故$\nabla f(x^{*})x^{*} = 0$
+
+另由General Optimality Condition有
+
+$\nabla f(x^{*})(y-x^{*}) \geq 0$
+
+$\Rightarrow \nabla f(x^{*})y \geq 0$
+
+因为$y \in domf$，即$y \leq 0$
+
+故$\nabla f(x^{*}) \leq 0$
+
+得证。
+\section{HW5}
+构造Lagrange函数
+
+$L(\omega ,b,\xi ,\alpha ,\mu ) = \frac{\omega ^{T}\omega}{2}+C\sum_{i = 1}^{n}\xi_{i} -\sum_{i=1}^{n}\alpha_{i}y_{i}(\omega^{T}x_{i} +b)-1 +\xi_{i} -\sum_{i=1}^{n}\mu_{i}\xi_{i} $
+
+$g(\alpha,\mu) = \mathop{max}\limits_{\omega,b,\xi} L(\omega,b,\xi,\alpha,\mu)$
+
+$s.t.\alpha \geq 0,\mu \geq 0 $
+
+对各变量求梯度并令其为0
+
+$\frac{\partial L}{\partial \omega} = \omega - \sum_{i=1}^{n} \alpha_{i}y_{i}x_{i}=0$
+
+$\frac{\partial L}{\partial \xi} = C-\alpha-\mu=0$
+
+$\frac{\partial L}{\partial b} = -\sum_{i=1}^{n} \alpha_{i}y_{i}=0$
+
+将上三式代入对偶函数
+
+$g(\alpha,\mu) = \frac{1}{2} \omega^{T}\omega - \sum_{i=1}^{n}\alpha_{i}y_{i}\omega^{T}x_{i} + \alpha$
+
+因为$\omega = \sum_{i=1}{n} \alpha_{i}y_{i}x_{i}$
+
+$g(\alpha,\mu) = -\frac{1}{2}\omega^{T}\omega+\alpha$
+
+$=-\frac{1}{2} \sum_{i=1}{n}\sum_{j=1}{n} \alpha_{i}\alpha_{j}y_{i}y_{j}x_{i}^{T}x_{j} + \alpha$
+
+$= -\frac{1}{2}\alpha^{T}\textbf{Q}\alpha + \alpha$
+
+其中$\textbf{Q}_{ij} =y_{i}y_{j}x_{i}^{T}x{j} $
+
+故SVM对偶问题为
+
+$\mathop{min}\limits_{\alpha} \frac{1}{2}\alpha^{T}\textbf{Q}\alpha - \alpha$
+
+$s.t.\alpha \geq 0,\mu \geq 0,C - \alpha - \mu = 0,\alpha^{T}y = x$
+\end{document} 
